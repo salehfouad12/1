@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>x o Game</title>
+    <style>
+        /* Add some basic styling to our game board */
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+        }
+        .cell {
+            background-color:blue;
+            padding: 30px;
+            text-align: center;
+            font-size: 25px;
+            cursor: pointer;
+        }
+        /* Add a red color to the cells with X or O */
+        .cell.X, .cell.O {
+            color:white;
+        }
+        center{
+        background-color:blue;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <h1>x o Game</h1>
+    </center>
+    <div class="game-board">
+        <!-- We'll dynamically generate the game cells using JavaScript -->
+    </div>
+    <script>
+        // Get the game board element
+        const gameBoard = document.querySelector('.game-board');
+
+        // Initialize the game state
+        let gameState = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ];
+
+        // Function to create the game cells
+        function createGameCells() {
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.textContent = '';
+                    cell.addEventListener('click', () => handleCellClick(i, j));
+                    gameBoard.appendChild(cell);
+                }
+            }
+        }
+
+        // Function to handle cell clicks
+        function handleCellClick(i, j) {
+            // Check if the cell is empty
+            if (gameState[i][j] === '') {
+                // Update the game state
+                gameState[i][j] = currentPlayer;
+                // Update the cell text content and add the X or O class
+                const cell = gameBoard.children[i * 3 + j];
+                cell.textContent = currentPlayer;
+                cell.classList.add(currentPlayer);
+                // Check for a win
+                checkForWin();
+                // Switch the current player
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+
+        // Function to check for a win
+        function checkForWin() {
+            // Check rows
+            for (let i = 0; i < 3; i++) {
+                if (gameState[i][0] === gameState[i][1] && gameState[i][1] === gameState[i][2] && gameState[i][0] !== '') {
+                    alert(`Player ${gameState[i][0]} wins!`);
+                    return;
+                }
+            }
+            // Check columns
+            for (let i = 0; i < 3; i++) {
+                if (gameState[0][i] === gameState[1][i] && gameState[1][i] === gameState[2][i] && gameState[0][i] !== '') {
+                    alert(`Player ${gameState[0][i]} wins!`);
+                    return;
+                }
+            }
+            // Check diagonals
+            if (gameState[0][0] === gameState[1][1] && gameState[1][1] === gameState[2][2] && gameState[0][0] !== '') {
+                alert(`Player ${gameState[0][0]} wins!`);
+                return;
+            }
+            if (gameState[0][2] === gameState[1][1] && gameState[1][1] === gameState[2][0] && gameState[0][2] !== '') {
+                alert(`Player ${gameState[0][2]} wins!`);
+                return;
+            }
+        }
+
+        // Initialize the current player
+        let currentPlayer = 'X';
+
+        // Create the game cells
+        createGameCells();
+    </script>
+    	<button><a href="index.html" > 🔙</a></button>
+</body>
+</html>

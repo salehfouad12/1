@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8" />
+<head>
+<center>
+  <meta charset="UTF-8">
+  <title>Snake Game</title>
+  <style type="text/css">
+  *{
+  margin:0;
+  padding:0;
+  }
+  body {
+  background-color: #f0f0f0;
+  }
+  
+  #game-canvas {
+  border: 1px solid black;
+  touch-action: none; /* This is important for mobile devices */
+  }
+  </style>
+</head>
+<body>
+  <canvas id="game-canvas" width="400" height="400"></canvas>
+  <script type="text/javascript">
+  let canvas = document.getElementById('game-canvas');
+  let ctx = canvas.getContext('2d');
+  let upButton = document.getElementById('up-button');
+  let downButton = document.getElementById('down-button');
+  let leftButton = document.getElementById('left-button');
+  let rightButton = document.getElementById('right-button');
+  let restartButton = document.getElementById('restart-button');
+  
+  let snake = [
+  { x: 200, y: 200 },
+  { x: 190, y: 200 },
+  { x: 180, y: 200 }
+  ];
+  
+  let food = {
+  x: Math.floor(Math.random() * 40) * 10,
+  y: Math.floor(Math.random() * 40) * 10
+  };
+  
+  let score = 0;
+  
+  let direction = 'right';
+  
+  let touchStartX, touchStartY, touchEndX, touchEndY;
+  
+  canvas.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  });
+  
+  canvas.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].clientX;
+  touchEndY = e.changedTouches[0].clientY;
+  
+  let deltaX = touchEndX - touchStartX;
+  let deltaY = touchEndY - touchStartY;
+  
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+  if (deltaX > 0) {
+  direction = 'right';
+  } else {
+  direction = 'left';
+  }
+  } else {
+  if (deltaY > 0) {
+  direction = 'down';
+  } else {
+  direction = 'up';
+  }
+  }
+  });
+  
+  function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'green';
+  for (let i = 0; i < snake.length; i++) {
+  ctx.fillRect(snake[i].x, snake[i].y, 10, 10);
+  }
+  ctx.fillStyle = 'red';
+  ctx.fillRect(food.x, food.y, 10, 10);
+  ctx.font = '24px Arial';
+  ctx.fillStyle = 'black';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillText(`Score: ${score}`, 10, 10);
+  }
+  
+  function update() {
+  for (let i = snake.length - 1; i > 0; i--) {
+  snake[i].x = snake[i - 1].x;
+  snake[i].y = snake[i - 1].y;
+  }
+  switch (direction) {
+  case 'up':
+  snake[0].y -= 10;
+  break;
+  case 'down':
+  snake[0].y += 10;
+  break;
+  case 'left':
+  snake[0].x -= 10;
+  break;
+  case 'right':
+  snake[0].x += 10;
+  break;
+  }
+  if (snake[0].x === food.x && snake[0].y === food.y) {
+  score++;
+  snake.push({ x: snake[snake.length - 1].x, y: snake[snake.length - 1].y });
+  food.x = Math.floor(Math.random() * 40) * 10;
+  food.y = Math.floor(Math.random() * 40) * 10;
+  }
+  for (let i = 1; i < snake.length; i++) {
+  if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+  alert(`Game Over! Your score is ${score}`);
+  snake = [
+  { x: 200, y: 200 },
+  { x: 190, y: 200 },
+  { x: 180, y: 200 }
+  ];
+  score = 0;
+  direction = 'right';
+  }
+  }
+  }
+  
+  setInterval(() => {
+  update();
+  draw();
+  }, 100);
+  </script>
+  <script type="text/javascript">
+ window.alert('القواعد يجب عدم انصدام بالحوجز للتحكم بالثعبان من رأسه')
+  </script>
+  	<button><a href="sg.html" > 🔙</a></button>
+</body>
+</html>
